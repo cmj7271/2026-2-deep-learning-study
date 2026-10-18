@@ -2,6 +2,7 @@ import { ModelRuntime } from './runtime.js';
 import { MODEL_INFO, DATASET_NAMES } from './model-info.js';
 import { loadDatasets } from './datasets.js';
 import { describeLayer } from './layer-help.js';
+import { renderLayerStructure } from './layer-structure.js';
 import { layout, valueIndex, channelValues, pixelColor, softmax, summarize } from './tensor-utils.js';
 
 const $ = id => document.getElementById(id);
@@ -28,8 +29,9 @@ function resetTrace() {
   $('result').replaceChildren(Object.assign(document.createElement('p'), {className:'muted',textContent:'실행하면 모델의 예측을 보여줍니다.'}));
   $('layer-name').textContent = '실행 후 레이어를 선택하세요';
   $('layer-help').hidden = true;
+  $('layer-structure').replaceChildren(); $('layer-structure').hidden = true;
   $('layer-operation').textContent = ''; $('layer-terms').replaceChildren();
-  for (const id of ['layer-shape','layer-stats','layer-parents','numbers','color-scale']) $(id).textContent = '';
+  for (const id of ['layer-shape','layer-parents','numbers','color-scale']) $(id).textContent = '';
   for (const id of ['overview','zoom']) $(id).getContext('2d').clearRect(0,0,512,512);
   $('cell-value').textContent = '셀을 가리키거나 눌러 실제 값을 확인하세요.';
   buildLayerList();
@@ -113,6 +115,7 @@ async function execute() {
     });
     if(state.row!==expectedRow)throw new Error('입력이 변경됐습니다. 다시 실행해 주세요.');
     renderResult();
+    if (state.selected >= 0) renderStructure(state.snapshots[state.selected]);
     message(`추론 완료 · ${state.result.snapshots.length}개 레이어 · ${(state.result.elapsedMs/1000).toFixed(2)}초 · 값 ${(state.result.snapshotBytes/1e6).toFixed(1)} MB 보존. 레이어를 선택해 다시 확인할 수 있습니다.`);
   } catch(error){message(`실행 실패: ${error.message}`,true);console.error(error);}
   finally{$('run').textContent='추론 실행';lock(false);}
@@ -142,11 +145,18 @@ function selectLayer(index) {
   const help=describeLayer(snapshot);
   $('layer-operation').textContent=help.summary;
   fields($('layer-terms'),help.terms);$('layer-help').hidden=false;
-  $('layer-stats').textContent=`min ${format(snapshot.stats.min)} · max ${format(snapshot.stats.max)} · mean ${format(snapshot.stats.mean)} · 실제 값 [${Array.from(snapshot.data.slice(0,6),format).join(', ')}${snapshot.data.length>6?', …':''}]`;
+  renderStructure(snapshot);
   const graph=catalog.graphs[snapshot.graph];
   $('layer-parents').textContent=`입력 연결: ${snapshot.parents.map(id=>graph.layers.find(layer=>layer.id===id)?.name||id).join(' + ')||'그래프 입력'} · 현재 이미지의 저장된 값`;
   const grid=layout(snapshot.shape);for(const id of ['channel','channel-slider']){$(id).max=grid.channels-1;$(id).value=0;}
   renderGrids();
+}
+function renderStructure(snapshot) {
+  renderLayerStructure($('layer-structure'), snapshot, state.path,
+    new Set(state.snapshots.map(item => item.key)), key => {
+      const index = state.snapshots.findIndex(item => item.key === key);
+      if (index >= 0) { state.follow = false; selectLayer(index); }
+    });
 }
 function makeTile(snapshot,channel) {
   const grid=layout(snapshot.shape), values=channelValues(snapshot.data,snapshot.shape,channel),stats=summarize(values),n=Math.max(grid.height,grid.width);

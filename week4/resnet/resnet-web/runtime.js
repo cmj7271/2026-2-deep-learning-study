@@ -1,5 +1,3 @@
-import { summarize } from './tensor-utils.js';
-
 export class ModelRuntime {
   constructor(catalog) {
     this.catalog = catalog;
@@ -91,7 +89,7 @@ export class ModelRuntime {
           if (trace) feeds[spec.feed] = result;
           const data = Float32Array.from(await result.data());
           const snapshot = { ...spec, key: `${part.graph}/${spec.id}`, graph: part.graph,
-            runId, data, stats: summarize(data), shape: result.shape,
+            runId, data, shape: result.shape,
             timeMs: performance.now() - started };
           snapshots.push(snapshot);
           await onLayer(snapshot, snapshots.length, total);

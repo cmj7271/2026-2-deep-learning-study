@@ -28,6 +28,12 @@ Windows에서는 `py resnet-web/serve.py --port 8000`으로 실행할 수 있다
 확인할 수 있다. Shortcut, BN·ReLU·pooling, 분류·위치 Head의 연산도 설명한다.
 Dense 이름 끝의 자동 식별 번호는 레이어 순서나 뉴런 수를 뜻하지 않는다.
 
+블록 구조 패널은 현재 stage, 잔차 블록 순서와 bottleneck의 주 경로·shortcut·합류 위치를
+표시한다. 현재 연산을 강조하며 계산된 연산을 누르면 해당 출력으로 이동한다. Conv는
+공간 커널 격자, 필터 하나의 크기, 필터 개수, stride와 padding을 표시한다. 커널·풀링
+설정은 제공 모델 그래프에서 읽은 `catalog.json`의 정보다. BN·ReLU·Add에는 합성곱
+커널이 없으며, Stem·Head는 잔차 블록과 구분해 표시한다.
+
 모델·이미지를 바꾸거나 새 실행을 시작하면 이전 실행값을 교체한다. 페이지를 새로 열면
 이전 실행을 복원하지 않는다. 화면에 표시된 backend가 실제 연산 backend다.
 WebGPU 초기화·모델 확인 실패 시 WebGL, WASM 순으로 시도한다.
