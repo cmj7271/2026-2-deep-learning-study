@@ -1,6 +1,6 @@
 """Train 변형본을 만들 때 밝기와 채도를 조금 바꾼다."""
 
-from shared.common import tf
+from .common import tf
 
 
 def make_brightness_saturation():

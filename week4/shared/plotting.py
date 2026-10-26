@@ -1,6 +1,6 @@
 """같은 형식으로 품종 예측과 머리 위치를 보여준다."""
 
-from shared.common import np
+from .common import np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 

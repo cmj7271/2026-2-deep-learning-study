@@ -1,6 +1,6 @@
-"""분류 정확도·교차 엔트로피와 사각형 IoU."""
+"""분류 정확도, 교차 엔트로피, 사각형 IoU."""
 
-from shared.common import keras, np
+from .common import keras, np
 
 
 def classification_score(actual, logits):

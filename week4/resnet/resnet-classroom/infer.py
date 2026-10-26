@@ -1,5 +1,7 @@
 """제공된 최종 가중치로 A부터 E까지 순서대로 확인한다."""
 
+import _bootstrap  # week4 공통 코드 경로 설정
+
 from a_base.infer import main as infer_base
 from b_domain.infer import main as infer_domain
 from c_augmentation.infer import main as infer_augmentation

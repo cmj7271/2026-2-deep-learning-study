@@ -1,6 +1,6 @@
 """ResNet 특징, Task별 Head, 최종 가중치 읽기와 저장."""
 
-from shared.common import ROOT, keras, tf
+from .common import ROOT, keras, tf
 
 
 @keras.saving.register_keras_serializable(package="student")

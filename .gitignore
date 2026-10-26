@@ -28,3 +28,6 @@ Desktop.ini
 
 # Logs
 *.log
+
+# Week 4 generated training runs
+/week4/subtask/runs/run_*/

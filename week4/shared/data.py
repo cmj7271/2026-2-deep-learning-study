@@ -3,7 +3,7 @@
 import csv
 
 from PIL import Image
-from shared.common import np, tf
+from .common import np, tf
 
 
 def read_images(csv_path):
