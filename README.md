@@ -5,7 +5,7 @@
 과제와 공지는 다음의 링크에 정리되어 있습니다.  
 https://docs.gdghongik.com/study/26-2/deep-learning
 
-강의는 다음의 재생목록을 참고해주세요.
+강의는 다음의 재생목록을 참고해주세요.  
 https://youtube.com/playlist?list=PLEfaVo26oUII&si=TpDTGJFZH1xlcZYm
 
 해당 스터디는 추론과 학습에서 시작하여 이미지와 자연어 분야까지 살펴봅니다.
